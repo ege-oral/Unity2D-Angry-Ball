@@ -7,7 +7,11 @@ public class BallHandler : MonoBehaviour
 {
     [SerializeField] GameObject ball;
     [SerializeField] Rigidbody2D pivot;
-    Vector2 startPos = new Vector2(-6f, 0f);
+    Vector2 startPos;
+
+    private void Start() {
+        startPos = pivot.position;
+    }
 
     public void RespawnBallRoutine()
     {

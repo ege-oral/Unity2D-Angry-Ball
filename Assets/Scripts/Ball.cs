@@ -12,6 +12,9 @@ public class Ball : MonoBehaviour
     private Camera mainCamera;
     private bool isDragging = false;
 
+    [SerializeField] float maxRightDragDistance = 1f;
+    [SerializeField] float minBottomDragDistance = -3.5f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,10 +46,19 @@ public class Ball : MonoBehaviour
     {
         currentBallRigidbody.isKinematic = true;
         Vector2 worldPosition = mainCamera.ScreenToWorldPoint(touch.position);
-        if(worldPosition.x < 1f)
+
+        if(worldPosition.x < maxRightDragDistance && worldPosition.y > minBottomDragDistance)
             currentBallRigidbody.position = worldPosition;
+        
+        else if (worldPosition.x > maxRightDragDistance && worldPosition.y > minBottomDragDistance)
+            currentBallRigidbody.position = new Vector2(maxRightDragDistance, worldPosition.y);
+
+        else if(worldPosition.y < minBottomDragDistance && worldPosition.x < maxRightDragDistance)
+            currentBallRigidbody.position = new Vector2(worldPosition.x, minBottomDragDistance);
+        
         else
-            currentBallRigidbody.position = new Vector2(1f, worldPosition.y);
+            currentBallRigidbody.position = new Vector2(maxRightDragDistance, minBottomDragDistance);
+        
     }
 
     private void LaunchBall()

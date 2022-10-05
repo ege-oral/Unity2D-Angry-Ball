@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class Ball : MonoBehaviour
 {
     Rigidbody2D currentBallRigidbody;
@@ -54,7 +53,7 @@ public class Ball : MonoBehaviour
     {
         currentBallRigidbody.isKinematic = false;
         ballHandler.RespawnBallRoutine();
-        Invoke(nameof(DestroyBallAfterLaunch), 2f);
+        Invoke(nameof(DestroyBallAfterLaunch), 2.5f);
     }
 
     private void OnTriggerEnter2D(Collider2D other) 
@@ -63,6 +62,12 @@ public class Ball : MonoBehaviour
         {
             currentBallSprintJoint.enabled = false;
         }
+    }
+
+    // If the ball still on the pivot and not exit from the trigger zone.
+    private void OnTriggerStay2D(Collider2D other) {
+        if(touch.phase == TouchPhase.Ended && other.gameObject.tag == "Pivot Trigger" && isDragging)
+            currentBallSprintJoint.enabled = false;
     }
 
     private void DestroyBallAfterLaunch()
